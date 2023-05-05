@@ -1,4 +1,6 @@
+import 'package:fakelegends/constants/string_constants.dart';
 import 'package:fakelegends/constants/style_constants.dart';
+import 'package:fakelegends/models/user_model.dart';
 import 'package:fakelegends/providers/user_list_provider.dart';
 import 'package:fakelegends/screens/user_profile.dart';
 import 'package:fakelegends/widgets/user_card_widget.dart';
@@ -13,16 +15,18 @@ class UserListDisplay extends StatefulWidget {
 }
 
 class _UserListDisplayState extends State<UserListDisplay> {
+  //Declaring scroll controller to use in listview builder
   final controller = ScrollController();
   @override
   void initState() {
     super.initState();
+    //Using provider to hit the api for data and maintain page index
     UserListProvider userListProvider =
         Provider.of<UserListProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       userListProvider.getData(index: userListProvider.getIndex);
     });
-
+    //This checks whether the scroll hit the end of screen
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
         userListProvider.incrementIndex();
@@ -41,45 +45,43 @@ class _UserListDisplayState extends State<UserListDisplay> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Fake Legends"),
+        title: Text(StringConstants().heading),
       ),
       body: Container(
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [StyleConstants().color, Colors.white],
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter)),
+          gradient: LinearGradient(
+              //Adding gradient style for the background
+              colors: [StyleConstants().color, Colors.white],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter),
+        ),
+        //Using Consumer to access data from the provider and maintain state changes
         child: Consumer<UserListProvider>(builder: (context, users, child) {
           return ListView.builder(
               controller: controller,
               itemCount: users.userDataList.length + 1,
               itemBuilder: (context, index) {
                 if (index < users.userDataList.length) {
-                  String firstName = users.userDataList[index].firstName;
-                  String lastName = users.userDataList[index].lastName;
-                  String email = users.userDataList[index].email;
-                  String imageUrl = users.userDataList[index].avatar;
+                  //checks if current index being loaded is less than the elements available in local state list
+                  Datum userIndexData = users.userDataList[index];
                   return GestureDetector(
+                    //Navigates to new profile page when clicked
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (_) => UserProfile(
-                                firstName: firstName,
-                                lastName: lastName,
-                                email: email,
-                                imageUrl: imageUrl,
+                                userData: userIndexData,
                               )));
                     },
                     child: UserCard(
-                      firstName: firstName,
-                      lastName: lastName,
-                      imageUrl: imageUrl,
-                      email: email,
+                      //Displays user details card
+                      userData: userIndexData,
                     ),
                   );
                 } else {
+                  //Checks if user has more data if not displays no more data to load
                   return users.noMoreData
-                      ? const Text(
-                          "No More Data to load",
+                      ? Text(
+                          StringConstants().noMoreData,
                           textAlign: TextAlign.center,
                         )
                       : const Center(

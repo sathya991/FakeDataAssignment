@@ -1,20 +1,10 @@
-import 'package:fakelegends/constants/style_constants.dart';
+import 'package:fakelegends/models/user_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:sizer/sizer.dart';
 
 class UserProfile extends StatelessWidget {
-  const UserProfile(
-      {super.key,
-      required this.firstName,
-      required this.email,
-      required this.lastName,
-      required this.imageUrl});
-  final String firstName;
-  final String email;
-  final String lastName;
-  final String imageUrl;
+  const UserProfile({super.key, required this.userData});
+  final Datum userData;
 
   @override
   Widget build(BuildContext context) {
@@ -30,22 +20,22 @@ class UserProfile extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 10.h,
-                backgroundImage: NetworkImage(imageUrl),
+                backgroundImage: NetworkImage(userData.avatar),
               ),
               SizedBox(
                 height: 3.h,
               ),
               Text(
-                firstName,
+                userData.firstName,
               ),
               SizedBox(
                 height: 3.h,
               ),
-              Text(lastName),
+              Text(userData.lastName),
               SizedBox(
                 height: 3.h,
               ),
-              Text(email)
+              Text(userData.email)
             ],
           ),
         ),

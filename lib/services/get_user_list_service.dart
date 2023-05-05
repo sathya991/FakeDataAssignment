@@ -4,12 +4,14 @@ import 'package:http/http.dart' as http;
 
 class GetUserListService {
   Future getUserList({int index = 1}) async {
-    var client = http.Client();
-    var uri = Uri.parse("${ApiConstants().userApiUrl}/?page=$index");
-    var response = await client.get(uri);
+    final client = http.Client();
+    final uri = Uri.parse('${ApiConstants().userApiUrl}/?page=$index');
+    //Index is passed as parameter to this service which is used as query parameter
+    final response = await client.get(uri);
     if (response.statusCode == 200) {
-      var json = response.body;
+      final json = response.body;
       return userModelFromJson(json);
+      //Usermodel class object is returned with data from API call.
     }
     client.close();
   }

@@ -2,17 +2,14 @@ import 'package:fakelegends/constants/style_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
+import '../models/user_model.dart';
+
 class UserCard extends StatelessWidget {
-  const UserCard(
-      {super.key,
-      required this.firstName,
-      required this.lastName,
-      required this.email,
-      required this.imageUrl});
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String imageUrl;
+  const UserCard({
+    super.key,
+    required this.userData,
+  });
+  final Datum userData;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +24,7 @@ class UserCard extends StatelessWidget {
           child: Row(
             children: [
               Image.network(
-                imageUrl,
+                userData.avatar,
                 fit: BoxFit.fitHeight,
                 height: 18.h,
                 width: 40.w,
@@ -42,7 +39,7 @@ class UserCard extends StatelessWidget {
                     "First Name",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(firstName),
+                  Text(userData.firstName),
                   SizedBox(
                     height: 3.h,
                   ),
@@ -50,7 +47,7 @@ class UserCard extends StatelessWidget {
                     "Last Name",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(lastName),
+                  Text(userData.lastName),
                   SizedBox(
                     height: 3.h,
                   ),
@@ -62,7 +59,7 @@ class UserCard extends StatelessWidget {
                     height: 5.h,
                     width: 36.w,
                     child: Text(
-                      email,
+                      userData.email,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
